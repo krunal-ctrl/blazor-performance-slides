@@ -565,6 +565,496 @@ private void HandleValueChanged(string value)
                 )
             },
 
+            // Generic Components
+            {
+                title: "Generic Components",
+                content: (
+                    <div>
+                        <h2 className="text-3xl font-bold text-blue-600 mb-6">Generic Components (@typeparam)</h2>
+                        <div className="space-y-4">
+                            <div className="bg-blue-50 p-4 rounded-lg">
+                                <h3 className="font-semibold text-lg mb-2">What are Generic Components?</h3>
+                                <p className="text-sm text-gray-700">Components that work with any data type, making them reusable across different scenarios</p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-green-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-green-700 mb-2">Benefits</h4>
+                                    <ul className="text-sm space-y-1">
+                                        <li>• Type-safe reusable components</li>
+                                        <li>• No casting required</li>
+                                        <li>• IntelliSense support</li>
+                                        <li>• Compile-time type checking</li>
+                                        <li>• Reduce code duplication</li>
+                                    </ul>
+                                </div>
+                                <div className="bg-purple-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-purple-700 mb-2">Use Cases</h4>
+                                    <ul className="text-sm space-y-1">
+                                        <li>• Generic data grids</li>
+                                        <li>• Dropdown/Select lists</li>
+                                        <li>• Modal dialogs</li>
+                                        <li>• List/Card components</li>
+                                        <li>• Form controls</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="bg-yellow-50 p-4 rounded-lg">
+                                <h3 className="font-semibold mb-2">Key Points</h3>
+                                <ul className="text-sm space-y-1">
+                                    <li>• Use @typeparam directive to define type parameters</li>
+                                    <li>• Can have multiple type parameters</li>
+                                    <li>• Support type constraints (where T : class)</li>
+                                    <li>• Works with both component parameters and methods</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                )
+            },
+
+            // Generic Components Code
+            {
+                title: "Generic Components - Code",
+                content: (
+                    <div>
+                        <h2 className="text-2xl font-bold text-blue-600 mb-4">Generic Component Implementation</h2>
+                        <div className="space-y-3">
+                            <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
+                                <div className="text-green-400 mb-1">// Generic List Component</div>
+                                <pre>{`
+@typeparam TItem
+
+<div class="list-container">
+    @if (Items != null && Items.Any())
+    {
+        @foreach (var item in Items)
+        {
+            <div class="list-item">
+                @ItemTemplate(item)
+            </div>
+        }
+    }
+    else
+    {
+        <p>@EmptyMessage</p>
+    }
+</div>
+
+@code {
+    [Parameter] public List<TItem> Items { get; set; }
+    [Parameter] public RenderFragment<TItem> ItemTemplate { get; set; }
+    [Parameter] public string EmptyMessage { get; set; } = "No items found";
+}`}</pre>
+                            </div>
+                            <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
+                                <div className="text-green-400 mb-1">// Using the Generic Component</div>
+                                <pre>{`
+<GenericList TItem="Product" Items="@products">
+    <ItemTemplate Context="product">
+        <h3>@product.Name</h3>
+        <p>Price: @product.Price.ToString("C")</p>
+    </ItemTemplate>
+</GenericList>
+
+<GenericList TItem="User" Items="@users">
+    <ItemTemplate Context="user">
+        <h3>@user.Name</h3>
+        <p>Email: @user.Email</p>
+    </ItemTemplate>
+</GenericList>
+
+@code {
+    private List<Product> products = new();
+    private List<User> users = new();
+}`}</pre>
+                            </div>
+                            <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
+                                <div className="text-green-400 mb-1">// Generic Component with Constraints</div>
+                                <pre>{`
+@typeparam TEntity where TEntity : class, IEntity
+
+<div class="entity-card">
+    <h3>ID: @Entity.Id</h3>
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public TEntity Entity { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    
+    // Interface constraint ensures type safety
+    public interface IEntity
+    {
+        int Id { get; set; }
+    }
+}`}</pre>
+                            </div>
+                            <div className="bg-blue-50 p-3 rounded-lg text-sm">
+                                <span className="font-semibold">💡 Pro Tip:</span> Use generic components for UI patterns that repeat across different data types to maximize code reuse
+                            </div>
+                        </div>
+                    </div>
+                )
+            },
+
+            // Templated Components
+            {
+                title: "Templated Components",
+                content: (
+                    <div>
+                        <h2 className="text-3xl font-bold text-blue-600 mb-6">Templated Components (RenderFragment)</h2>
+                        <div className="space-y-4">
+                            <div className="bg-blue-50 p-4 rounded-lg">
+                                <h3 className="font-semibold text-lg mb-2">What are Templated Components?</h3>
+                                <p className="text-sm text-gray-700">Components that accept RenderFragment parameters, allowing consumers to customize parts of the UI</p>
+                            </div>
+                            <div className="bg-green-50 p-4 rounded-lg">
+                                <h3 className="font-semibold text-lg mb-2">RenderFragment Types</h3>
+                                <div className="space-y-2 text-sm">
+                                    <div className="bg-white p-3 rounded">
+                                        <p className="font-semibold mb-1">RenderFragment</p>
+                                        <p className="text-xs text-gray-600">Simple template without parameters</p>
+                                    </div>
+                                    <div className="bg-white p-3 rounded">
+                                        <p className="font-semibold mb-1">RenderFragment&lt;T&gt;</p>
+                                        <p className="text-xs text-gray-600">Template with typed context parameter</p>
+                                    </div>
+                                    <div className="bg-white p-3 rounded">
+                                        <p className="font-semibold mb-1">ChildContent</p>
+                                        <p className="text-xs text-gray-600">Default parameter name for component content</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-purple-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-purple-700 mb-2">Use Cases</h4>
+                                    <ul className="text-sm space-y-1">
+                                        <li>• Custom data tables</li>
+                                        <li>• Card layouts with slots</li>
+                                        <li>• Dialog boxes with custom content</li>
+                                        <li>• Tabs and accordions</li>
+                                        <li>• Wizard/stepper components</li>
+                                    </ul>
+                                </div>
+                                <div className="bg-yellow-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-yellow-700 mb-2">Benefits</h4>
+                                    <ul className="text-sm space-y-1">
+                                        <li>• Maximum flexibility</li>
+                                        <li>• Separation of concerns</li>
+                                        <li>• Reusable component structure</li>
+                                        <li>• Custom rendering per use case</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            },
+
+            // Templated Components Code
+            {
+                title: "Templated Components - Code",
+                content: (
+                    <div>
+                        <h2 className="text-2xl font-bold text-blue-600 mb-4">Templated Component Examples</h2>
+                        <div className="space-y-3">
+                            <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
+                                <div className="text-green-400 mb-1">// Data Table Component</div>
+                                <pre>{`
+@typeparam TItem
+
+<table class="table">
+    <thead>
+        <tr>@TableHeader</tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Items)
+        {
+            <tr>@RowTemplate(item)</tr>
+        }
+    </tbody>
+    @if (TableFooter != null)
+    {
+        <tfoot>@TableFooter</tfoot>
+    }
+</table>
+
+@code {
+    [Parameter] public List<TItem> Items { get; set; }
+    [Parameter] public RenderFragment TableHeader { get; set; }
+    [Parameter] public RenderFragment<TItem> RowTemplate { get; set; }
+    [Parameter] public RenderFragment TableFooter { get; set; }
+}`}</pre>
+                            </div>
+                            <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
+                                <div className="text-green-400 mb-1">// Using the Data Table</div>
+                                <pre>{`
+<DataTable TItem="Product" Items="@products">
+    <TableHeader>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Actions</th>
+    </TableHeader>
+    <RowTemplate Context="product">
+        <td>@product.Name</td>
+        <td>@product.Price.ToString("C")</td>
+        <td>@product.Stock</td>
+        <td>
+            <button @onclick="() => EditProduct(product)">Edit</button>
+            <button @onclick="() => DeleteProduct(product)">Delete</button>
+        </td>
+    </RowTemplate>
+    <TableFooter>
+        <tr>
+            <td colspan="4">Total Products: @products.Count</td>
+        </tr>
+    </TableFooter>
+</DataTable>`}</pre>
+                            </div>
+                            <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
+                                <div className="text-green-400 mb-1">// Card Component with Slots</div>
+                                <pre>{`
+<div class="card">
+    @if (Header != null)
+    {
+        <div class="card-header">@Header</div>
+    }
+    <div class="card-body">
+        @ChildContent
+    </div>
+    @if (Footer != null)
+    {
+        <div class="card-footer">@Footer</div>
+    }
+</div>
+
+@code {
+    [Parameter] public RenderFragment Header { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment Footer { get; set; }
+}
+
+// Usage
+<Card>
+    <Header>
+        <h3>Product Details</h3>
+    </Header>
+    <ChildContent>
+        <p>Name: @product.Name</p>
+        <p>Price: @product.Price</p>
+    </ChildContent>
+    <Footer>
+        <button>Add to Cart</button>
+    </Footer>
+</Card>`}</pre>
+                            </div>
+                        </div>
+                    </div>
+                )
+            },
+
+            // Browser Storage
+            {
+                title: "Browser Storage",
+                content: (
+                    <div>
+                        <h2 className="text-3xl font-bold text-blue-600 mb-6">Browser Storage in Blazor</h2>
+                        <div className="space-y-4">
+                            <div className="bg-blue-50 p-4 rounded-lg">
+                                <h3 className="font-semibold text-lg mb-2">Storage Options</h3>
+                                <p className="text-sm text-gray-700">Blazor provides multiple ways to store data in the browser</p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-green-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-green-700 mb-2">LocalStorage</h4>
+                                    <ul className="text-sm space-y-1">
+                                        <li>• Persists across browser sessions</li>
+                                        <li>• ~5-10MB storage limit</li>
+                                        <li>• Shared across all tabs</li>
+                                        <li>• Use for: user preferences, theme</li>
+                                    </ul>
+                                </div>
+                                <div className="bg-purple-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-purple-700 mb-2">SessionStorage</h4>
+                                    <ul className="text-sm space-y-1">
+                                        <li>• Cleared when tab closes</li>
+                                        <li>• ~5-10MB storage limit</li>
+                                        <li>• Isolated per tab</li>
+                                        <li>• Use for: temporary data, forms</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="bg-orange-50 p-4 rounded-lg">
+                                <h3 className="font-semibold text-lg mb-2">ProtectedBrowserStorage (Blazor Server)</h3>
+                                <ul className="text-sm space-y-1">
+                                    <li>• Encrypted storage for sensitive data</li>
+                                    <li>• Built-in data protection</li>
+                                    <li>• Uses ASP.NET Core Data Protection</li>
+                                    <li>• Available: ProtectedLocalStorage, ProtectedSessionStorage</li>
+                                </ul>
+                            </div>
+                            <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+                                <p className="font-semibold text-yellow-800">⚠️ Security Warning:</p>
+                                <p className="text-sm text-yellow-700">Never store sensitive data (passwords, tokens, PII) in unencrypted browser storage. Use ProtectedBrowserStorage for Blazor Server or secure backend storage</p>
+                            </div>
+                        </div>
+                    </div>
+                )
+            },
+
+            // Browser Storage Code
+            {
+                title: "Browser Storage - Code",
+                content: (
+                    <div>
+                        <h2 className="text-2xl font-bold text-blue-600 mb-4">Browser Storage Implementation</h2>
+                        <div className="space-y-3">
+                            <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
+                                <div className="text-green-400 mb-1">// LocalStorage via JSInterop (Blazor WebAssembly)</div>
+                                <pre>{`
+@inject IJSRuntime JS
+
+<button @onclick="SaveTheme">Save Theme</button>
+<button @onclick="LoadTheme">Load Theme</button>
+
+@code {
+    private string currentTheme = "light";
+
+    private async Task SaveTheme()
+    {
+        await JS.InvokeVoidAsync("localStorage.setItem", 
+            "theme", currentTheme);
+    }
+
+    private async Task LoadTheme()
+    {
+        try
+        {
+            currentTheme = await JS.InvokeAsync<string>(
+                "localStorage.getItem", "theme") ?? "light";
+        }
+        catch (Exception ex)
+        {
+            // Handle storage not available
+        }
+    }
+    
+    // Save complex objects
+    private async Task SaveUserPreferences()
+    {
+        var preferences = new UserPreferences 
+        { 
+            Theme = "dark", 
+            Language = "en" 
+        };
+        var json = JsonSerializer.Serialize(preferences);
+        await JS.InvokeVoidAsync("localStorage.setItem", 
+            "preferences", json);
+    }
+    
+    private async Task<UserPreferences> LoadUserPreferences()
+    {
+        var json = await JS.InvokeAsync<string>(
+            "localStorage.getItem", "preferences");
+        
+        return string.IsNullOrEmpty(json) 
+            ? new UserPreferences() 
+            : JsonSerializer.Deserialize<UserPreferences>(json);
+    }
+}`}</pre>
+                            </div>
+                            <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
+                                <div className="text-green-400 mb-1">// ProtectedBrowserStorage (Blazor Server)</div>
+                                <pre>{`
+@inject ProtectedLocalStorage ProtectedLocalStorage
+@inject ProtectedSessionStorage ProtectedSessionStorage
+
+@code {
+    private UserData userData;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Load encrypted data
+            var result = await ProtectedLocalStorage
+                .GetAsync<UserData>("userData");
+            
+            userData = result.Success ? result.Value : new UserData();
+            StateHasChanged();
+        }
+    }
+
+    private async Task SaveUserData()
+    {
+        // Save with encryption
+        await ProtectedLocalStorage.SetAsync("userData", userData);
+    }
+
+    private async Task ClearUserData()
+    {
+        await ProtectedLocalStorage.DeleteAsync("userData");
+    }
+    
+    // Session storage (cleared when tab closes)
+    private async Task SaveTemporaryData()
+    {
+        await ProtectedSessionStorage.SetAsync(
+            "formData", formData);
+    }
+}`}</pre>
+                            </div>
+                            <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
+                                <div className="text-green-400 mb-1">// Storage Service (Reusable Pattern)</div>
+                                <pre>{`
+public interface IStorageService
+{
+    Task<T> GetItemAsync<T>(string key);
+    Task SetItemAsync<T>(string key, T value);
+    Task RemoveItemAsync(string key);
+}
+
+public class LocalStorageService : IStorageService
+{
+    private readonly IJSRuntime _js;
+
+    public LocalStorageService(IJSRuntime js)
+    {
+        _js = js;
+    }
+
+    public async Task<T> GetItemAsync<T>(string key)
+    {
+        var json = await _js.InvokeAsync<string>(
+            "localStorage.getItem", key);
+        
+        return string.IsNullOrEmpty(json) 
+            ? default 
+            : JsonSerializer.Deserialize<T>(json);
+    }
+
+    public async Task SetItemAsync<T>(string key, T value)
+    {
+        var json = JsonSerializer.Serialize(value);
+        await _js.InvokeVoidAsync("localStorage.setItem", key, json);
+    }
+
+    public async Task RemoveItemAsync(string key)
+    {
+        await _js.InvokeVoidAsync("localStorage.removeItem", key);
+    }
+}
+
+// Register in Program.cs
+builder.Services.AddScoped<IStorageService, LocalStorageService>();`}</pre>
+                            </div>
+                        </div>
+                    </div>
+                )
+            },
+
+
             // Section 2: Performance Section Intro
             {
                 title: "Performance Optimization",
