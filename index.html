@@ -546,19 +546,20 @@ private void HandleValueChanged(string value)
                             </div>
                             <div className="bg-gray-900 text-gray-100 p-3 rounded-lg font-mono text-xs overflow-auto">
                                 <div className="text-green-400 mb-1">// State Container Pattern</div>
-                                <pre>{`public class AppState
-                            {
-                                private string _currentUser;
-                                public event Action OnChange;
+                                <pre>{`
+public class AppState
+{
+    private string _currentUser;
+    public event Action OnChange;
 
-                                public string CurrentUser
-                                {
-                                    get => _currentUser;
-                                    set { _currentUser = value; NotifyStateChanged(); }
-                                }
+    public string CurrentUser
+    {
+        get => _currentUser;
+        set { _currentUser = value; NotifyStateChanged(); }
+    }
 
-                                private void NotifyStateChanged() => OnChange?.Invoke();
-                            }`}</pre>
+    private void NotifyStateChanged() => OnChange?.Invoke();
+}`}</pre>
                             </div>
                         </div>
                     </div>
